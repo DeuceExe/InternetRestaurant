@@ -4,5 +4,5 @@ import androidx.lifecycle.ViewModel
 import com.example.impl.rest.IMenuApi
 import org.koin.core.component.KoinComponent
 
-class BucketViewModel(private val serviceApi: IMenuApi) : ViewModel(), KoinComponent {
+class BucketViewModel : ViewModel(), KoinComponent {
 }

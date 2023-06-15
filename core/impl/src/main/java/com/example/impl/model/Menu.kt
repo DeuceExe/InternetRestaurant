@@ -1,19 +1,19 @@
 package com.example.impl.model
 
 data class Menu(
-    val dishes: List<Dish>
+    val dishes: List<Dishes>
 )
 
-data class Dish(
+data class Dishes(
     val id: Int,
     val name: String,
     val price: Int,
     val weight: Int,
     val description: String,
     val image_url: String,
-    val tegs: List<Teg>
+    val tegs: List<Tegs>
 )
 
-data class Teg(
-    val teg_name: List<String>
+data class Tegs(
+    val tegName: List<String>
 )
