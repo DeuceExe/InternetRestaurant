@@ -37,6 +37,27 @@ android {
 
 dependencies {
 
+    //Modules
+    implementation project(":core:impl")
+    implementation project(":core:api")
+
+    //Koin
+    implementation "io.insert-koin:koin-android:3.3.3"
+    implementation "io.insert-koin:koin-android-compat:3.1.2"
+    implementation "io.insert-koin:koin-androidx-workmanager:3.1.2"
+    implementation "io.insert-koin:koin-androidx-compose:3.1.2"
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //okhttp
+    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
+    implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10"
+
+    //Gson
+    implementation 'com.google.code.gson:gson:2.10.1'
+
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.9.0'
