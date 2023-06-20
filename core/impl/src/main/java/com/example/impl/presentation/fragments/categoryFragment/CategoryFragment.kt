@@ -1,26 +1,105 @@
 package com.example.impl.presentation.fragments.categoryFragment
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.api.ICategoryFragment
-import com.example.impl.databinding.FragmentMainBinding
+import com.example.api.IFragmentReplace
+import com.example.api.IToolbarChange
+import com.example.impl.databinding.FragmentCategoryBinding
+import com.example.impl.model.Categories
+import com.example.impl.presentation.fragments.adapters.categoryAdapter.CategoryAdapter
+import com.example.impl.presentation.fragments.dishesFragment.DishesFragment
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.component.KoinComponent
 
 class CategoryFragment : Fragment(), ICategoryFragment, KoinComponent {
 
-    private var _binding: FragmentMainBinding? = null
+    private val viewModel by viewModel<CategoryViewModel>()
+
+    private var _binding: FragmentCategoryBinding? = null
     val binding get() = requireNotNull(_binding)
+
+    private lateinit var listener: IToolbarChange
+
+    private var fragmentChangeListener: IFragmentReplace? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentCategoryBinding.inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        initObserver()
+        initUi()
+
+        arguments?.let {
+            CoroutineScope(Job()).launch {
+                viewModel.getCategory()
+            }
+        }
+    }
+
+    private fun setAdapter(
+        categoriesList: List<Categories>,
+        recyclerView: RecyclerView,
+    ) {
+        val categoryAdapter = CategoryAdapter(categoriesList) {
+            onCategoryClickListener(it)
+            sendCategoryToActivity(categoriesList[it-1].name)
+        }
+        recyclerView.adapter = categoryAdapter
+        categoryAdapter.notifyDataSetChanged()
+    }
+
+    private fun onCategoryClickListener(position: Int) {
+        val fragment = DishesFragment()
+
+        fragment.arguments = Bundle().apply {
+            putInt(DishesFragment.BUNDLE, position)
+        }
+
+        fragmentChangeListener?.replaceFragment(fragment)
+    }
+
+    private fun initObserver() {
+        viewModel.categories.observe(viewLifecycleOwner) { categories ->
+            setAdapter(categories, binding.rvCategory)
+        }
+    }
+
+    private fun initUi() {
+        binding.rvCategory.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun sendCategoryToActivity(categoryName: String) {
+        listener.getCategory(categoryName)
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (context is IFragmentReplace) {
+            listener = context as IToolbarChange
+            fragmentChangeListener = context
+        } else {
+            throw RuntimeException("$context")
+        }
     }
 
     companion object {

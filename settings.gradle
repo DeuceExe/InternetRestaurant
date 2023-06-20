@@ -16,3 +16,4 @@ rootProject.name = "InternetRestaurant"
 include ':app'
 include ':core:api'
 include ':core:impl'
+include ':core:uikit'

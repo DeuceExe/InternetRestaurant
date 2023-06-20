@@ -11,9 +11,5 @@ data class Dishes(
     val weight: Int,
     val description: String,
     val image_url: String,
-    val tegs: List<Tegs>
-)
-
-data class Tegs(
-    val tegName: List<String>
+    val tegs: List<String>
 )

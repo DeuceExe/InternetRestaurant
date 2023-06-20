@@ -6,7 +6,7 @@ import com.example.internetrestaurant.di.createRetrofitModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.component.KoinComponent
-import org.koin.core.context.GlobalContext
+import org.koin.core.context.GlobalContext.startKoin
 import org.koin.core.module.Module
 
 class BaseApplication : Application(), KoinComponent {
@@ -22,7 +22,7 @@ class BaseApplication : Application(), KoinComponent {
     )
 
     private fun insertKoin(application: Application, moduleList: List<Module>) {
-        GlobalContext.startKoin {
+        startKoin {
             androidLogger()
             androidContext(application)
             modules(moduleList)

@@ -1,7 +1,9 @@
 package com.example.impl.model
 
+import com.google.gson.annotations.SerializedName
+
 data class Category(
-    val categories : List<Categories>
+    @SerializedName("сategories") val categories : List<Categories>
 )
 
 data class Categories(

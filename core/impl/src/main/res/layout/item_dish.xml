@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="5dp">
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardView_item_dish"
+        android:layout_width="110dp"
+        android:layout_height="110dp"
+        android:layout_marginTop="15dp"
+        app:cardBackgroundColor="@color/gray"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/image_dish"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_gravity="center"
+            app:layout_constraintBottom_toTopOf="@id/tv_dish"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@tools:sample/avatars" />
+    </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_dish"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:textSize="14sp"
+            android:gravity="start"
+            android:layout_marginEnd="5dp"
+            app:layout_constraintStart_toStartOf="@id/cardView_item_dish"
+            app:layout_constraintEnd_toEndOf="@id/cardView_item_dish"
+            app:layout_constraintTop_toBottomOf="@id/cardView_item_dish"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="Рис с рыбой" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

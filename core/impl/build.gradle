@@ -36,6 +36,7 @@ android {
 dependencies {
 
     implementation project(":core:api")
+    implementation project(":core:uikit")
 
     //Koin
     implementation "io.insert-koin:koin-android:3.3.3"
@@ -50,6 +51,11 @@ dependencies {
     //okhttp
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.10'
     implementation "com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.10"
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.14.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.14.2'
 
     implementation 'androidx.core:core-ktx:1.8.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
