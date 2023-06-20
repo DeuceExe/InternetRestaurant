@@ -2,23 +2,25 @@ package com.example.impl.presentation.dialog
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.example.impl.databinding.DialogDishBinding
 import com.example.impl.model.Dishes
-import com.example.impl.rest.IOrderInfo
+import com.example.impl.model.Menu
+import com.example.impl.utils.getParcelable
+import com.example.impl.utils.putParcelable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
 
-class CustomDialog(context: Context) : Dialog(context), KoinComponent {
+class CustomDialog(context: Context) : Dialog(context) {
 
     private lateinit var binding: DialogDishBinding
 
-    private val orderList: MutableList<Dishes> = mutableListOf()
-
-    private lateinit var orderListener: IOrderInfo
+    private var orderList = Menu(arrayListOf())
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,17 +42,23 @@ class CustomDialog(context: Context) : Dialog(context), KoinComponent {
             tvSelectedDishWeight.text = " - ${dish.weight}г"
             tvSelectedDishDescription.text = dish.description
         }
-        orderList.add(dish)
+
+        val orderPrefs = context.getSharedPreferences("orderDetails", MODE_PRIVATE)
+        val savedOrderList = orderPrefs?.getParcelable(SHARED_BUNDLE, Menu(arrayListOf()))
+        if (savedOrderList?.dishes.isNullOrEmpty()) {
+            savedOrderList?.dishes?.add(dish)
+        }
+        orderList.dishes.add(dish)
     }
 
     private fun setClickListener() {
         var isFavorite = false
 
-        binding.cardViewCancel.setOnClickListener {
+        binding.imageCancel.setOnClickListener {
             dismiss()
         }
 
-        binding.cardViewFavorite.setOnClickListener {
+        binding.imageFavorite.setOnClickListener {
             isFavorite = if (isFavorite) {
                 binding.imageFavorite.setImageResource(com.example.impl.R.drawable.ic_favorite_unselected)
                 false
@@ -61,20 +69,20 @@ class CustomDialog(context: Context) : Dialog(context), KoinComponent {
         }
 
         binding.btnAddToBucket.setOnClickListener {
-            sendOrder(orderList)
+            saveOrderList()
         }
     }
 
-    private fun sendOrder(dish: MutableList<Dishes>) {
-        orderListener.onOrderDataReceived(dish)
+    private fun saveOrderList() {
+        val orderDetails: SharedPreferences =
+            context.getSharedPreferences("orderDetails", MODE_PRIVATE)
+        val edit: Editor = orderDetails.edit()
+        edit.putParcelable(SHARED_BUNDLE, orderList)
+        edit.apply()
     }
 
-    fun setOrderListener(listener: IOrderInfo) {
-        orderListener = listener
-    }
+    companion object {
 
-    override fun dismiss() {
-        orderList.clear()
-        super.dismiss()
+        const val SHARED_BUNDLE = "shared_bundle"
     }
 }

@@ -4,69 +4,54 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/transparent"
     app:cardBackgroundColor="@color/white"
     app:cardCornerRadius="15dp"
-    app:strokeWidth="1dp">
+    app:strokeWidth="0dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:backgroundTint="@color/transparent">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView_selected_dish"
+        <ImageView
+            android:id="@+id/image_selected_dish"
             android:layout_width="310dp"
             android:layout_height="230dp"
-            android:layout_margin="15dp"
-            app:cardBackgroundColor="@color/gray"
-            app:cardCornerRadius="10dp"
-            app:cardUseCompatPadding="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/image_round_corner"
+            android:paddingStart="57dp"
+            android:paddingTop="14dp"
+            android:paddingEnd="56dp"
+            android:paddingBottom="14dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/image_selected_dish"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </com.google.android.material.card.MaterialCardView>
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView_cancel"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintEnd_toEndOf="@id/cardView_selected_dish"
-            app:layout_constraintTop_toTopOf="@id/cardView_selected_dish">
+        <ImageView
+            android:id="@+id/image_cancel"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/button_round_corner"
+            android:padding="12dp"
+            android:src="@drawable/ic_cancel"
+            app:layout_constraintEnd_toEndOf="@id/image_selected_dish"
+            app:layout_constraintTop_toTopOf="@id/image_selected_dish" />
 
-            <ImageView
-                android:id="@+id/image_cancel"
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_cancel" />
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView_favorite"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintEnd_toStartOf="@id/cardView_cancel"
-            app:layout_constraintTop_toTopOf="@id/cardView_selected_dish">
-
-            <ImageView
-                android:id="@+id/image_favorite"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:src="@drawable/ic_favorite_unselected" />
-        </com.google.android.material.card.MaterialCardView>
+        <ImageButton
+            android:id="@+id/image_favorite"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/button_round_corner"
+            android:padding="2dp"
+            android:src="@drawable/ic_favorite_unselected"
+            app:layout_constraintEnd_toStartOf="@id/image_cancel"
+            app:layout_constraintTop_toTopOf="@id/image_selected_dish" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tv_selected_dish_title"
@@ -76,10 +61,10 @@
             android:fontFamily="@font/sfpro_bold"
             android:textColor="@color/black"
             android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="@id/cardView_selected_dish"
+            app:layout_constraintEnd_toEndOf="@id/image_selected_dish"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/cardView_selected_dish"
-            app:layout_constraintTop_toBottomOf="@id/cardView_selected_dish"
+            app:layout_constraintStart_toStartOf="@id/image_selected_dish"
+            app:layout_constraintTop_toBottomOf="@id/image_selected_dish"
             tools:text="Рыба с овощами" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -91,7 +76,7 @@
             android:textSize="14sp"
             app:layout_constraintEnd_toStartOf="@id/tv_selected_dish_weight"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@id/cardView_selected_dish"
+            app:layout_constraintStart_toStartOf="@id/image_selected_dish"
             app:layout_constraintTop_toBottomOf="@id/tv_selected_dish_title"
             tools:text="800 р." />
 
@@ -102,7 +87,7 @@
             android:fontFamily="@font/sfpro"
             android:textColor="@color/gray_text"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@id/cardView_selected_dish"
+            app:layout_constraintEnd_toEndOf="@id/image_selected_dish"
             app:layout_constraintStart_toEndOf="@id/tv_selected_dish_price"
             app:layout_constraintTop_toBottomOf="@id/tv_selected_dish_title"
             tools:text=" - 560г." />
@@ -115,8 +100,8 @@
             android:fontFamily="@font/sfpro"
             android:textColor="@color/gray_text"
             android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="@id/cardView_selected_dish"
-            app:layout_constraintStart_toStartOf="@id/cardView_selected_dish"
+            app:layout_constraintEnd_toEndOf="@id/image_selected_dish"
+            app:layout_constraintStart_toStartOf="@id/image_selected_dish"
             app:layout_constraintTop_toBottomOf="@id/tv_selected_dish_price"
             tools:text="Рыба с овощами фвыап ывап ыварпывфа пывкар ываппр ывап ывап ывар ывапр ывап ыварывр" />
 
@@ -131,9 +116,10 @@
             android:text="@string/add_to_bucket"
             android:textAllCaps="false"
             android:textColor="@color/white"
+            app:cornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/cardView_selected_dish"
-            app:layout_constraintStart_toStartOf="@id/cardView_selected_dish"
+            app:layout_constraintEnd_toEndOf="@id/image_selected_dish"
+            app:layout_constraintStart_toStartOf="@id/image_selected_dish"
             app:layout_constraintTop_toBottomOf="@id/tv_selected_dish_description" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

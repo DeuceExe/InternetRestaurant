@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,31 +51,34 @@ class DishesFragment : Fragment(), KoinComponent {
     }
 
     private fun setAdapter(
-        dishesList: List<Dishes>?,
-        tagList: List<String>?,
-        recyclerView: RecyclerView
+        dishesList: List<Dishes>
     ) {
-        if (dishesList != null) {
-            val dishesAdapter = DishesAdapter(dishesList) {
-                customDialog = CustomDialog(context!!)
-                customDialog.show()
-                customDialog.setDishInfo(dishesList[it-1])
+        val tagsAdapter = TagAdapter(TAGS) { tags ->
+            val filter = dishesList.filter { dish ->
+                dish.tegs == tags
             }
-
-            recyclerView.adapter = dishesAdapter
-            dishesAdapter.notifyDataSetChanged()
-        } else if (tagList != null) {
-            val tagsAdapter = TagAdapter(tagList)
-            recyclerView.adapter = tagsAdapter
-            tagsAdapter.notifyDataSetChanged()
+            setDishAdapter(filter, binding.rvDishes)
         }
+
+        binding.rvTags.adapter = tagsAdapter
+        tagsAdapter.notifyDataSetChanged()
+        setDishAdapter(dishesList, binding.rvDishes)
+    }
+
+    private fun setDishAdapter(dishesList: List<Dishes>, recyclerView: RecyclerView) {
+        val dishesAdapter = DishesAdapter(dishesList) {
+            customDialog = CustomDialog(context!!)
+            customDialog.show()
+            customDialog.setDishInfo(dishesList[it - 1])
+        }
+        recyclerView.adapter = dishesAdapter
+        dishesAdapter.notifyDataSetChanged()
     }
 
     private fun initObserver() {
         viewModel.dishes.observe(viewLifecycleOwner) { dishes ->
-            setAdapter(dishes, null, binding.rvDishes)
+            setAdapter(dishes)
         }
-        setAdapter(null, TAGS, binding.rvTags)
     }
 
     private fun initUi() {

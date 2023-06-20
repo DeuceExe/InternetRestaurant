@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.api.ICategoryFragment
 import com.example.api.IFragmentReplace
-import com.example.api.IToolbarChange
+import com.example.impl.data.repository.LocationRepository
 import com.example.impl.databinding.FragmentCategoryBinding
 import com.example.impl.model.Categories
 import com.example.impl.presentation.fragments.adapters.categoryAdapter.CategoryAdapter
 import com.example.impl.presentation.fragments.dishesFragment.DishesFragment
+import com.example.impl.utils.getCurrentDate
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ class CategoryFragment : Fragment(), ICategoryFragment, KoinComponent {
     private var _binding: FragmentCategoryBinding? = null
     val binding get() = requireNotNull(_binding)
 
-    private lateinit var listener: IToolbarChange
+    private lateinit var locationRepository: LocationRepository
 
     private var fragmentChangeListener: IFragmentReplace? = null
 
@@ -43,6 +44,11 @@ class CategoryFragment : Fragment(), ICategoryFragment, KoinComponent {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.toolbar.tvDate.text = getCurrentDate()
+
+        locationRepository = LocationRepository(requireActivity())
+        locationRepository.getLastLocation()
 
         initObserver()
         initUi()
@@ -60,7 +66,6 @@ class CategoryFragment : Fragment(), ICategoryFragment, KoinComponent {
     ) {
         val categoryAdapter = CategoryAdapter(categoriesList) {
             onCategoryClickListener(it)
-            sendCategoryToActivity(categoriesList[it-1].name)
         }
         recyclerView.adapter = categoryAdapter
         categoryAdapter.notifyDataSetChanged()
@@ -80,6 +85,10 @@ class CategoryFragment : Fragment(), ICategoryFragment, KoinComponent {
         viewModel.categories.observe(viewLifecycleOwner) { categories ->
             setAdapter(categories, binding.rvCategory)
         }
+
+        locationRepository.currentLocation.observe(viewLifecycleOwner){
+            binding.toolbar.tvLocation.text = it
+        }
     }
 
     private fun initUi() {
@@ -87,15 +96,10 @@ class CategoryFragment : Fragment(), ICategoryFragment, KoinComponent {
             LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     }
 
-    private fun sendCategoryToActivity(categoryName: String) {
-        listener.getCategory(categoryName)
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
         if (context is IFragmentReplace) {
-            listener = context as IToolbarChange
             fragmentChangeListener = context
         } else {
             throw RuntimeException("$context")
