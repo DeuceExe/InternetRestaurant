@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bucket_counter">1</string>
+    <string name="toast_add_to_bucket">Блюдо добавлено в корзину</string>
+    <string name="already_added">Блюдо уже добавлено в корзину</string>
+</resources>

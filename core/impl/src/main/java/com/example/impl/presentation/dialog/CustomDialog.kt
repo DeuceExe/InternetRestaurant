@@ -6,7 +6,9 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.os.Bundle
+import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.example.impl.R
 import com.example.impl.databinding.DialogDishBinding
 import com.example.impl.model.Dishes
 import com.example.impl.model.Menu
@@ -20,13 +22,12 @@ class CustomDialog(context: Context) : Dialog(context) {
 
     private lateinit var binding: DialogDishBinding
 
-    private var orderList = Menu(arrayListOf())
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DialogDishBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        window?.setBackgroundDrawableResource(android.R.color.transparent)
         setClickListener()
     }
 
@@ -48,7 +49,8 @@ class CustomDialog(context: Context) : Dialog(context) {
         if (savedOrderList?.dishes.isNullOrEmpty()) {
             savedOrderList?.dishes?.add(dish)
         }
-        orderList.dishes.add(dish)
+        if(!orderList.dishes.contains(dish))
+            orderList.dishes.add(dish)
     }
 
     private fun setClickListener() {
@@ -60,16 +62,17 @@ class CustomDialog(context: Context) : Dialog(context) {
 
         binding.imageFavorite.setOnClickListener {
             isFavorite = if (isFavorite) {
-                binding.imageFavorite.setImageResource(com.example.impl.R.drawable.ic_favorite_unselected)
+                binding.imageFavorite.setImageResource(R.drawable.ic_favorite_unselected)
                 false
             } else {
-                binding.imageFavorite.setImageResource(com.example.impl.R.drawable.ic_favorite_selected)
+                binding.imageFavorite.setImageResource(R.drawable.ic_favorite_selected)
                 true
             }
         }
 
         binding.btnAddToBucket.setOnClickListener {
             saveOrderList()
+            Toast.makeText(context, R.string.toast_add_to_bucket, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -83,6 +86,7 @@ class CustomDialog(context: Context) : Dialog(context) {
 
     companion object {
 
+        private var orderList = Menu(arrayListOf())
         const val SHARED_BUNDLE = "shared_bundle"
     }
 }

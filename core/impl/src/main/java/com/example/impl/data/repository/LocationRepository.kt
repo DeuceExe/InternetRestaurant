@@ -102,13 +102,13 @@ class LocationRepository(private val activity: Activity){
 
     private fun showLocationSettingsDialog() {
         val builder = AlertDialog.Builder(activity)
-        builder.setTitle("Location Services Required")
-            .setMessage("Please enable location services to use this feature.")
-            .setPositiveButton("Settings") { _, _ ->
+        builder.setTitle("Служба определения местоположения отключена")
+            .setMessage("Пожалуйста, включите службы определения местоположения.")
+            .setPositiveButton("Включить") { _, _ ->
                 val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                 activity.startActivity(intent)
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton("Отмена") { dialog, _ ->
                 dialog.dismiss()
             }
             .setCancelable(false)

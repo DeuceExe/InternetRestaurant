@@ -2,11 +2,11 @@ package com.example.impl.presentation.fragments.categoryFragment
 
 import android.content.Context
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.api.ICategoryFragment
@@ -65,17 +65,18 @@ class CategoryFragment : Fragment(), ICategoryFragment, KoinComponent {
         recyclerView: RecyclerView,
     ) {
         val categoryAdapter = CategoryAdapter(categoriesList) {
-            onCategoryClickListener(it)
+            onCategoryClickListener(it, categoriesList[it-1].name)
         }
         recyclerView.adapter = categoryAdapter
         categoryAdapter.notifyDataSetChanged()
     }
 
-    private fun onCategoryClickListener(position: Int) {
+    private fun onCategoryClickListener(position: Int, category: String) {
         val fragment = DishesFragment()
 
         fragment.arguments = Bundle().apply {
             putInt(DishesFragment.BUNDLE, position)
+            putString(DishesFragment.BUNDLE, category)
         }
 
         fragmentChangeListener?.replaceFragment(fragment)
@@ -104,6 +105,11 @@ class CategoryFragment : Fragment(), ICategoryFragment, KoinComponent {
         } else {
             throw RuntimeException("$context")
         }
+    }
+
+    override fun onResume() {
+        locationRepository.getLastLocation()
+        super.onResume()
     }
 
     companion object {

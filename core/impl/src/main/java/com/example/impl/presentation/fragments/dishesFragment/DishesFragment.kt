@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +13,7 @@ import com.example.impl.model.Dishes
 import com.example.impl.presentation.dialog.CustomDialog
 import com.example.impl.presentation.fragments.adapters.dishesAdapter.DishesAdapter
 import com.example.impl.presentation.fragments.adapters.tagAdapter.TagAdapter
+import com.example.uikit.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
@@ -40,12 +40,14 @@ class DishesFragment : Fragment(), KoinComponent {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setToolbar()
         initObserver()
         initUi()
 
         arguments?.let {
             CoroutineScope(Job()).launch {
                 viewModel.getDishes()
+                binding.toolbar.tvCategory.text = it.getString(BUNDLE)
             }
         }
     }
@@ -55,14 +57,16 @@ class DishesFragment : Fragment(), KoinComponent {
     ) {
         val tagsAdapter = TagAdapter(TAGS) { tags ->
             val filter = dishesList.filter { dish ->
-                dish.tegs == tags
+                dish.tegs.any { tag ->
+                    tag in tags
+                }
             }
             setDishAdapter(filter, binding.rvDishes)
         }
 
         binding.rvTags.adapter = tagsAdapter
-        tagsAdapter.notifyDataSetChanged()
         setDishAdapter(dishesList, binding.rvDishes)
+        tagsAdapter.notifyDataSetChanged()
     }
 
     private fun setDishAdapter(dishesList: List<Dishes>, recyclerView: RecyclerView) {
@@ -85,6 +89,13 @@ class DishesFragment : Fragment(), KoinComponent {
         binding.rvDishes.layoutManager = GridLayoutManager(context, 3)
         binding.rvTags.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+    }
+
+    private fun setToolbar() {
+        binding.toolbar.imageLocation.setImageResource(R.drawable.ic_back)
+        binding.toolbar.imageLocation.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
     }
 
     companion object {
